@@ -1,7 +1,6 @@
 package com.example.adrian.shoppinglistappandroid;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -17,7 +16,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         Intent intent = getIntent();
-        String username = intent.getStringExtra(MainActivity.USER_NAME);
+        String username = intent.getStringExtra(LoginActivity.USER_NAME);
 
         TextView textView = (TextView) findViewById(R.id.textView3);
 
