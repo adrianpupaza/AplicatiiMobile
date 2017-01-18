@@ -145,7 +145,7 @@ class LoginPage extends Component {
                         console.log(res.status, res.data.message)
                         if (res.status == 200 && res.data.message == 'success'){
                             Alert.alert("Login", "Authentication successful", [
-                                {text: 'OK', onPress: () => this.gotoNext()},
+                                {text: 'OK', onPress: () => this.gotoNext(res.data.user.id)},
                             ]);
                         }
                         else{
@@ -177,10 +177,12 @@ class LoginPage extends Component {
           ]
       )
   }
-  gotoNext(){
+  gotoNext(userId){
+      console.log("to main page with userId: " + userId);
       this.props.navigator.push({
           id: 'MainPage',
-          name: 'Main Page'
+          name: 'Main Page',
+          userId: userId
       });
   }
 

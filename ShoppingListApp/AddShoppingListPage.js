@@ -13,14 +13,12 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-class PersonPage extends Component {
+class AddShoppingListPage extends Component {
   constructor(props) {
     super(props);
-    console.log('EmployeeManager - Add employee');
+    console.log('Add shopping list');
     this.state = {
       name: '',
-      phone: '',
-      address:''
     }
   }
 
@@ -37,31 +35,40 @@ class PersonPage extends Component {
   }
   add(){
     var name = this.state.name;
-    var phone = this.state.phone;
-    var address = this.state.address;
     console.log(name);
-    console.log(phone);
-    console.log(address);
+
 
     if (this.state.name == '' || this.state.phone == '' || this.state.address == '') {
       Alert.alert(
-          'Empty field(s)!',
-          'Please complete all fields!',
+          'Empty name!',
+          'Please give a name!',
           [
             {text: 'OK', onPress: () => console.log('OK Pressed')},
           ]
       )
     }
     else{
-      var url = 'http://server-url.com/insert2.php?name='+this.state.name+
-          '&phone='+this.state.phone+
-          '&address='+this.state.address;
+      var url = 'http://adrianpupaza.000webhostapp.com/addShoppingListGet.php?name=' + this.state.name + '&userId=' + this.props.userId;
 
-      var result = fetch(url).then(function(response){
-        if (response._bodyInit == 'success') {
-          ToastAndroid.show('Employee added', ToastAndroid.SHORT);
-        }
-      }.bind(this));
+        var result = fetch(url).then((response) => {
+            response.json()
+                .then(data => ({
+                        data: data,
+                        status:response.status
+                    })
+                ).then(res => {
+                  console.log(res);
+                console.log(res.status, res.data.message)
+                if (res.status == 200){
+                    Alert.alert("Add", "Shopping list added", [
+                        {text: 'OK', onPress: () => console.log(res.data)},
+                    ]);
+                }
+                else{
+                    Alert.alert("Login", "Authentication failed");
+                }
+            });
+        })
     }
 
 
@@ -73,19 +80,10 @@ class PersonPage extends Component {
         <TextInput placeholder='Name'
                    style={{width:200, textAlign: 'center'}}
                    onChangeText={(text) => this.setState({...this.state, name: text})}/>
-
-        <TextInput placeholder='Phone'
-                   style={{width:200, textAlign: 'center'}}
-                   onChangeText={(text) => this.setState({...this.state, phone: text})}/>
-
-        <TextInput placeholder='Address'
-                   style={{width:200, textAlign: 'center'}}
-                   onChangeText={(text) => this.setState({...this.state, address: text})}/>
         <Button
+            title="Add"
             onPress={this.add.bind(this)}
-            title="Add employee"
             color="#2E64FE"
-            accessibilityLabel="Add employee to the list"
         />
       </View>
     );
@@ -116,11 +114,11 @@ var NavigationBarRouteMapper = {
     return (
       <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
         <Text style={{color: 'white', margin: 10, fontSize: 16}}>
-          Add employee
+          Add shopping list
         </Text>
       </TouchableOpacity>
     );
   }
 };
 
-module.exports = PersonPage;
+module.exports = AddShoppingListPage;
