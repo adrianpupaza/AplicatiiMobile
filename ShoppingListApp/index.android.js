@@ -1,106 +1,91 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
-import React, { Component } from 'react';
+'use strict';
+import React, {Component} from 'react';
 import {
-    AppRegistry,
-    Text,
-    View,
-    Navigator,
-    StyleSheet
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  Navigator,
+  TouchableOpacity,
 } from 'react-native';
-import MyScene from './MyScene';
-import WelcomeScene from './WelcomeScene'
 
-export default class ShoppingListApp extends Component {
-    render() {
-        function renderScene(route, navigator) {
-            if (route.passProps.sceneType === "welcome") {
-                return <WelcomeScene styles={styles} navigator={navigator} {...route.passProps}/>
+var LoginPage = require('./LoginPage');
+var MainPage = require('./MainPage');
+var PersonPage = require('./PersonPage');
+var NoNavigatorPage = require('./NoNavigatorPage');
+
+class App extends Component {
+  render() {
+    return (
+      <Navigator
+          initialRoute={{id: 'LoginPage', name: 'Index'}}
+          renderScene={this.renderScene.bind(this)}
+          configureScene={(route) => {
+            if (route.sceneConfig) {
+              return route.sceneConfig;
             }
-            else {
-                <BasicComponent hello="Hello world!"/>
-            }
-        }
-        return (
-            //     <MyScene
-            //         title={route.passProps.title}
-            //         sceneType={route.passProps.sceneType}
-            //         // Function to call when a new scene should be displayed
-            //         onForward={(sceneTypeProp, titleProp) => {
-            //           const nextIndex = route.index + 1;
-            //           navigator.push({
-            //             index: nextIndex,
-            //             passProps:{
-            //                 sceneType: sceneTypeProp,
-            //                 title: titleProp,
-            //             },
-            //           });
-            //         }}
-            //         // Function to call to go back to the previous scene
-            //         onBack={() => {
-            //           if (route.index > 0) {
-            //             navigator.pop();
-            //           }
-            //         }}
-            //         }
-            // />
-            <Navigator
-                style={{flex:1}}
-                initialRoute={{ passProps: { sceneType:"welcome" , index:0}}}
-                renderScene={renderScene}
-            />
-        );
+            return Navigator.SceneConfigs.FloatFromRight;
+          }} />
+    );
+  }
+  renderScene(route, navigator) {
+    var routeId = route.id;
+    if (routeId === 'LoginPage') {
+      return (
+        <LoginPage
+          navigator={navigator} />
+      );
     }
+    if (routeId === 'MainPage') {
+      return (
+        <MainPage
+            navigator={navigator} />
+      );
+    }
+    if (routeId === 'PersonPage') {
+      return (
+        <PersonPage
+          navigator={navigator} />
+      );
+    }
+    if (routeId === 'NoNavigatorPage') {
+      return (
+        <NoNavigatorPage
+            navigator={navigator} />
+      );
+    }
+    return this.noRoute(navigator);
+
+  }
+  noRoute(navigator) {
+    return (
+      <View style={{flex: 1, alignItems: 'stretch', justifyContent: 'center'}}>
+        <TouchableOpacity style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+            onPress={() => navigator.pop()}>
+          <Text style={{color: 'red', fontWeight: 'bold'}}>Go to index</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-    fullWidthButton: {
-        backgroundColor: 'deepskyblue',
-        height:40,
-        width:100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    buttonText: {
-        fontWeight: 'bold',
-        fontSize: 20,
-        color: 'azure'
-    }
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
+  },
 });
 
-class BasicComponent extends Component {
-    render() {
-        function sayHello(){
-            return <View>
-                <Text>{this.props.hello}</Text>
-                <Text>Hello</Text>
-                </View>
-        }
-        return (
-        sayHello()
-        );
-    }
-}
-
-AppRegistry.registerComponent('ShoppingListApp', () => ShoppingListApp);
+AppRegistry.registerComponent('ShoppingListApp', () => App);
