@@ -37,14 +37,15 @@ class MainPage extends Component {
     }
 
     getMoviesFromApiAsync() {
-    return fetch('http://adrianpupaza.000webhostapp.com/getAllShoppingListsForUser.php?userId=1')
+        var url = 'http://adrianpupaza.000webhostapp.com/getAllShoppingListsForUser.php?userId=' + this.getUserId();
+     fetch(url)
         .then((response) => response.json())
         .then((responseJson) => {
             var result = responseJson.result;
             var arr = [];
             for (var i in result){
-                console.log(result[i].id+ ' .'+ result[i].name +' .'+ result[i].userId);
-                arr.push(result[i].id+ ' .'+ result[i].name +' .'+ result[i].userId);
+                console.log(result[i].id+ ';'+ result[i].name +';'+ result[i].userId);
+                arr.push(result[i].id+ ';'+ result[i].name +';'+ result[i].userId);
                 arr.push('\n');
             }
             this.setState({
@@ -83,7 +84,7 @@ class MainPage extends Component {
 
 
     onPressItem(rowData){
-        var objects = rowData.split('.');
+        var objects = rowData.split(';');
         var name = objects[0] + ' ' + objects[1] + ' ' + objects[2];
 
         Alert.alert(
@@ -105,19 +106,23 @@ class MainPage extends Component {
                     renderRow={(rowData) => <Text onPress={this.onPressItem.bind(this,rowData)}>{rowData}</Text>}
                 />
                 <Button
-                    onPress={this.onPress.bind(this)}
+                    onPress={this.onPress.bind(this, this.props.userId)}
                     title="Add shopping list"
                     color="#2E64FE"
-                    accessibilityLabel="Add shopping list for current user"
                 />
             </View>
         );
     }
-    onPress() {
+    onPress(userId) {
+        console.log("to add shopping list page with userId: " + userId);
         this.props.navigator.push({
-            id: 'PersonPage',
-            name: 'Person Page',
+            id: 'AddShoppingListPage',
+            name: 'Add shopping list page',
+            userId: userId
         });
+    }
+    getUserId(){
+        return this.props.userId;
     }
 }
 var NavigationBarRouteMapper = {

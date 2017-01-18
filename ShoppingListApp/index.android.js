@@ -11,14 +11,14 @@ import {
 
 var LoginPage = require('./LoginPage');
 var MainPage = require('./MainPage');
-var PersonPage = require('./PersonPage');
+var AddShoppingListPage = require('./AddShoppingListPage');
 var NoNavigatorPage = require('./NoNavigatorPage');
 
 class App extends Component {
   render() {
     return (
       <Navigator
-          initialRoute={{id: 'LoginPage', name: 'Index'}}
+          initialRoute={{id: 'LoginPage', name: 'Index', userId: 0}}
           renderScene={this.renderScene.bind(this)}
           configureScene={(route) => {
             if (route.sceneConfig) {
@@ -33,25 +33,29 @@ class App extends Component {
     if (routeId === 'LoginPage') {
       return (
         <LoginPage
-          navigator={navigator} />
+          navigator={navigator}
+          userId = {route.userId} />
       );
     }
     if (routeId === 'MainPage') {
       return (
         <MainPage
-            navigator={navigator} />
+            navigator={navigator}
+            userId = {route.userId}/>
       );
     }
-    if (routeId === 'PersonPage') {
+    if (routeId === 'AddShoppingListPage') {
       return (
-        <PersonPage
-          navigator={navigator} />
+        <AddShoppingListPage
+          navigator={navigator}
+          userId = {route.userId} />
       );
     }
     if (routeId === 'NoNavigatorPage') {
       return (
         <NoNavigatorPage
-            navigator={navigator} />
+            navigator={navigator}
+            userId = {route.userId} />
       );
     }
     return this.noRoute(navigator);
@@ -62,7 +66,7 @@ class App extends Component {
       <View style={{flex: 1, alignItems: 'stretch', justifyContent: 'center'}}>
         <TouchableOpacity style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
             onPress={() => navigator.pop()}>
-          <Text style={{color: 'red', fontWeight: 'bold'}}>Go to index</Text>
+          <Text style={{fontWeight: 'bold'}}>Go to index</Text>
         </TouchableOpacity>
       </View>
     );
