@@ -104,18 +104,7 @@ class LoginPage extends Component {
 	  
   }
 
-    GetMovies() {
-    return fetch('https://server-url.com/fetch.php')
-      .then((response) => response.json())
-	  .then((json) => {
-		console.log(json)
-		})
-      .catch((error) => {
-        console.error(error);
-      });
-	}
-	  
-	GetLogin() {
+    GetLogin() {
         console.log("Login pressed");
         if (this.state.username == '' || this.state.password == '') {
             Alert.alert(
